@@ -1,0 +1,105 @@
+﻿@model Proba.Models.Korisnik
+
+@{
+    ViewBag.Title = "Izmeni korisnika";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Izmeni korisnika</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4></h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDKorisnik)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Prezime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Prezime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Prezime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Email">Email</label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" name="Email" value="@Model.Email" readonly="readonly">
+            </div>
+        </div>
+
+        @if (Model.Tip == "Klijent")
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.BrojTokena, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BrojTokena, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BrojTokena, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Status</label>
+            <div class="col-md-10">
+                <select name="Status" class="form-control">
+                    @if (Model.Status == "Aktivan")
+                    {
+                        <option selected>Aktivan</option>
+                        <option>Neaktivan</option>
+                    }
+                    else
+                    {
+                        <option>Aktivan</option>
+                        <option selected>Neaktivan</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Tip</label>
+            <div class="col-md-10">
+                <select name="Tip" class="form-control">
+                    @switch (Model.Tip)
+                    {
+                        case "Klijent":
+                            <option selected>Klijent</option>
+                            <option>Agent</option>
+                            <option>Admin</option>
+                            break;
+                        case "Agent":
+                            <option>Klijent</option>
+                            <option selected>Agent</option>
+                            <option>Admin</option>
+                            break;
+                        case "Admin":
+                            <option>Klijent</option>
+                            <option>Agent</option>
+                            <option selected>Admin</option>
+                            break;
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Sačuvaj" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

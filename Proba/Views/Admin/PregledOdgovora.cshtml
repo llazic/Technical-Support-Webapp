@@ -1,0 +1,192 @@
+﻿@model Proba.Models.Odgovor
+
+@{
+    ViewBag.Title = "Pregled odgovora";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Odgovor:</h2>
+
+<div>
+    <h4></h4>
+    <br />
+    @Html.DisplayFor(model => model.Tekst)
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        Broj pozitivnih ocena
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.BrojPozitivnihOcena)
+                    </dd>
+
+                    <dt>
+                        Broj negativnih ocena
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.BrojNegativnihOcena)
+                    </dd>
+
+                    <dt>
+                        Datum postavljanja
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DatumPravljenja)
+                    </dd>
+
+                    <dt>
+                        Autor
+                    </dt>
+
+                    <dd>
+                        <a href="/Admin/IzmeniKorisnika?id=@Model.Korisnik.IDKorisnik">@Model.Korisnik.Ime</a>
+                    </dd>
+
+                    <dt>
+                        Ovo je odgovor na:
+                    </dt>
+
+                    <dd>
+                        @if (Model.Odgovoreni == null)
+                        {
+                            @Html.ActionLink("Pitanje", "PregledPitanja", new { id = Model.Pitanje.IDPitanje })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Odgovor", "PregledOdgovora", new { id = Model.Odgovoreni })
+                        }
+                    </dd>
+                </dl>
+            </td>
+            <td align="right">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="button" value="Oceni pozitivno" class="btn btn-success" style="margin-top:5px; width:157px" onclick="oceniPozitivno()" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" value="Oceni negativno" class="btn btn-danger" style="margin-top:5px; width:157px" onclick="oceniNegativno()" />
+                        </td>
+                    </tr>
+                    @if (@Model.Pitanje.Status == "Otkljucano")
+                    {
+                        <tr>
+                            <td>
+
+                                <form method="post" action="~/Admin/NapraviOdgovor" style="margin-top:5px;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="IDPitanje" value="@Model.Pitanje.IDPitanje" />
+                                    <input type="hidden" name="Odgovoreni" value="@Model.IDOdgovor" />
+                                    <input type="submit" value="Odgovori na odgovor" class="btn btn-default" />
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            <form method="post" action="~/Admin/ObrisiOdgovor">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@Model.IDOdgovor" />
+                                <input type="submit" value="Obriši" class="btn btn-default" style="margin-top:5px; width:157px" />
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@if (Model.Odgovor1.Count > 0)
+{
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>
+                <h4>Odgovori:</h4>
+            </td>
+            <td align="right">
+                <select class="form-control" id="sortiranje" onchange="sortTable()">
+                    <option>Sortiraj...</option>
+                    <option>Hronološki</option>
+                    <option>Najviše dobrih ocena</option>
+                    <option>Najviše loših ocena</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+}
+
+<div id="odgovoriDiv">
+    @foreach (var odg in Model.Odgovor1)
+    {
+        <span>
+            <hr />
+            <table width="100%">
+                <tr>
+                    <td>
+                        @odg.Tekst
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <a href="/Admin/IzmeniKorisnika?id=@odg.Korisnik.IDKorisnik">@odg.Korisnik.Ime</a> | @odg.BrojPozitivnihOcena pozitivnih | @odg.BrojNegativnihOcena negativnih | @odg.DatumPravljenja.ToString("dd.MM.yyyy. HH.mm.ss") | @Html.ActionLink("Prikaži", "PregledOdgovora", new { id = odg.IDOdgovor })
+                    </td>
+                </tr>
+            </table>
+        </span>
+    }
+</div>
+
+
+
+<script>
+    function oceniPozitivno() {
+        $.ajax({
+            url: "../Oceni",
+            method: "POST", // post is safer, but could also be GET
+            data: {
+                IDOdgovor : @Model.IDOdgovor,
+                vrsta: 'Pozitivna'
+            }, // any data (as a JSON object) you want to pass to the method
+            success: function (response) {
+                if (response == 'true') {
+                    var brojPozitivnih = document.getElementsByTagName("dd")[0];
+                    brojPozitivnih.innerHTML = parseInt(brojPozitivnih.innerHTML) + 1;
+                    alert('Uspešno ste ocenili ovaj odgovor.');
+                } else {
+                    alert('Već ste ocenili ovaj odgovor.');
+                }
+            }
+        });
+    }
+
+    function oceniNegativno() {
+        $.ajax({
+            url: "../Oceni",
+            method: "POST", // post is safer, but could also be GET
+            data: {
+                IDOdgovor : @Model.IDOdgovor,
+                vrsta: 'Negativna'
+            }, // any data (as a JSON object) you want to pass to the method
+            success: function (response) {
+                if (response == 'true') {
+                    var brojNegativnih = document.getElementsByTagName("dd")[1];
+                    brojNegativnih.innerHTML = parseInt(brojNegativnih.innerHTML) + 1;
+                    alert('Uspešno ste ocenili ovaj odgovor.');
+                } else {
+                    alert('Već ste ocenili ovaj odgovor.');
+                }
+            }
+        });
+    }
+</script>

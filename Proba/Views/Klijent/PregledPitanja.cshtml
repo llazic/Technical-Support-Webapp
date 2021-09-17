@@ -1,0 +1,163 @@
+﻿@model Tuple<Proba.Models.Pitanje, Proba.Models.Korisnik>
+
+@{
+    ViewBag.Title = "Pregled pitanja";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+
+<h2>@Html.DisplayFor(model => Model.Item1.Naslov)</h2>
+
+
+<div>
+    <hr />
+    @*<img src="@Html.DisplayFor(model => Model.Item1.Slika)" style="float:right; border:1px solid black" width="200" height="200" onerror="this.src='../../slike/znak_pitanja.png'" />*@
+    <img src='@Url.Action( "DohvatiSliku", new { id = Model.Item1.IDPitanje } )' style="float:right; border:1px solid black" width="200" height="200">
+    @Html.DisplayFor(model => Model.Item1.Tekst)
+    <div style="clear:both"></div>
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>
+                <dl class="dl-horizontal">
+                    <dt>
+                        Datum Postavljanja
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.Item1.DatumPravljenja)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => Model.Item1.Status)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.Item1.Status)
+                    </dd>
+
+                    @if (Model.Item1.Status == "Zakljucano")
+                    {
+                        <dt>
+                            @Html.DisplayNameFor(model => Model.Item1.DatumZakljucavanja)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => Model.Item1.DatumZakljucavanja)
+                        </dd>
+                    }
+
+                    <dt>
+                        Kategorija
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.Item1.Kategorija.Naziv)
+                    </dd>
+
+                    <dt>
+                        Autor
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.Item1.Korisnik.Ime)
+                    </dd>
+
+                    <dt>
+                        Ukupan Broj Odgovora
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => Model.Item1.Odgovor.Count)
+                    </dd>
+
+                </dl>
+            </td>
+            <td align="right">
+
+                <table>
+                    @if (Model.Item1.Autor == Model.Item2.IDKorisnik)
+                    {
+                        <tr>
+                            <td>
+                                <form method="post" action="~/Klijent/ObrisiPitanje">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="IDPitanje" value="@Model.Item1.IDPitanje" />
+                                    <input type="submit" value="Obriši pitanje" class="btn btn-default" style="margin-top:5px; width:157px"/>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    @if (Model.Item1.Autor == Model.Item2.IDKorisnik && @Model.Item1.Status == "Otkljucano")
+                    {
+                        <tr>
+                            <td>
+                                <form method="post" action="~/Klijent/ZakljucajPitanje">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="IDPitanje" value="@Model.Item1.IDPitanje" />
+                                    <input type="submit" value="Zaključaj pitanje" class="btn btn-default" style="margin-top:5px; width:157px"/>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    @if (@Model.Item1.Status == "Otkljucano")
+                    {
+                        <tr>
+                            <td>
+                                <form method="post" action="~/Klijent/NapraviOdgovor">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="IDPitanje" value="@Model.Item1.IDPitanje" />
+                                    <input type="hidden" name="Odgovoreni" value="-1" />
+                                    <input type="submit" value="Odgovori na pitanje" class="btn btn-default" style="margin-top:5px; width:157px"/>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@if (Model.Item1.Odgovor.Count > 0)
+{
+    <hr />
+    <table width="100%">
+        <tr>
+            <td>
+                <h4>Odgovori:</h4>
+            </td>
+            <td align="right">
+                <select class="form-control" id="sortiranje" onchange="sortTable()">
+                    <option>Sortiraj...</option>
+                    <option>Hronološki</option>
+                    <option>Najviše dobrih ocena</option>
+                    <option>Najviše loših ocena</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+}
+
+<div id="odgovoriDiv">
+    @foreach (var odg in Model.Item1.Odgovor)
+    {
+        if (odg.Odgovoreni == null)
+        {
+            <span>
+                <hr />
+                <table width="100%">
+                    <tr>
+                        <td>
+                            @odg.Tekst
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            @odg.Korisnik.Ime | @odg.BrojPozitivnihOcena pozitivnih | @odg.BrojNegativnihOcena negativnih | @odg.DatumPravljenja.ToString("dd.MM.yyyy. HH.mm.ss") | @Html.ActionLink("Prikaži", "PregledOdgovora", new { id = odg.IDOdgovor })
+                        </td>
+                    </tr>
+                </table>
+            </span>
+        }
+    }
+</div>

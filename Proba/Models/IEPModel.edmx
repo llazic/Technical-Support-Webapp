@@ -1,0 +1,729 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IEPBazaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AgentPovezan">
+          <Key>
+            <PropertyRef Name="IDKorisnik" />
+            <PropertyRef Name="IDKanal" />
+          </Key>
+          <Property Name="IDKorisnik" Type="int" Nullable="false" />
+          <Property Name="IDKanal" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kanal">
+          <Key>
+            <PropertyRef Name="IDKanal" />
+          </Key>
+          <Property Name="Naziv" Type="varchar" MaxLength="20" />
+          <Property Name="DatumOtvaranja" Type="datetime" Nullable="false" />
+          <Property Name="IDKorisnik" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="IDKanal" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kategorija">
+          <Key>
+            <PropertyRef Name="IDKategorija" />
+          </Key>
+          <Property Name="IDKategorija" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="IDKorisnik" />
+          </Key>
+          <Property Name="IDKorisnik" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Prezime" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Lozinka" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="BrojTokena" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="9" Nullable="false" />
+          <Property Name="Tip" Type="varchar" MaxLength="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Narudzbina">
+          <Key>
+            <PropertyRef Name="IDNarudzbina" />
+          </Key>
+          <Property Name="IDNarudzbina" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DatumPravljenja" Type="datetime" Nullable="false" />
+          <Property Name="KupljeniPaket" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="IDKorisnik" Type="int" Nullable="false" />
+          <Property Name="Cena" Type="int" />
+          <Property Name="DobijenoTokena" Type="int" />
+        </EntityType>
+        <EntityType Name="Ocenio">
+          <Key>
+            <PropertyRef Name="IDKorisnik" />
+            <PropertyRef Name="IDOdgovor" />
+          </Key>
+          <Property Name="IDKorisnik" Type="int" Nullable="false" />
+          <Property Name="IDOdgovor" Type="int" Nullable="false" />
+          <Property Name="Ocena" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Odgovor">
+          <Key>
+            <PropertyRef Name="IDOdgovor" />
+          </Key>
+          <Property Name="IDOdgovor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Odgovoreni" Type="int" />
+          <Property Name="Tekst" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="IDKorisnik" Type="int" Nullable="false" />
+          <Property Name="BrojPozitivnihOcena" Type="int" Nullable="false" />
+          <Property Name="BrojNegativnihOcena" Type="int" Nullable="false" />
+          <Property Name="DatumPravljenja" Type="datetime" Nullable="false" />
+          <Property Name="KorenoPitanje" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pitanje">
+          <Key>
+            <PropertyRef Name="IDPitanje" />
+          </Key>
+          <Property Name="Tekst" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Slika" Type="varbinary(max)" />
+          <Property Name="IDKategorija" Type="int" />
+          <Property Name="Autor" Type="int" Nullable="false" />
+          <Property Name="DatumPravljenja" Type="datetime" Nullable="false" />
+          <Property Name="DatumZakljucavanja" Type="datetime" />
+          <Property Name="Naslov" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="EkstenzijaSlike" Type="varchar" MaxLength="20" />
+          <Property Name="IDKanal" Type="varchar" MaxLength="40" />
+          <Property Name="IDPitanje" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vrednosti">
+          <Key>
+            <PropertyRef Name="Naziv" />
+          </Key>
+          <Property Name="Naziv" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Cena" Type="int" />
+          <Property Name="BrojTokena" Type="int" />
+        </EntityType>
+        <Association Name="R_10">
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="0..1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kanal">
+              <PropertyRef Name="IDKanal" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="IDKanal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_11">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Narudzbina" Type="Self.Narudzbina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Narudzbina">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_12">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="AgentPovezan" Type="Self.AgentPovezan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="AgentPovezan">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_13">
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="1" />
+          <End Role="AgentPovezan" Type="Self.AgentPovezan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kanal">
+              <PropertyRef Name="IDKanal" />
+            </Principal>
+            <Dependent Role="AgentPovezan">
+              <PropertyRef Name="IDKanal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_15">
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="1" />
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pitanje">
+              <PropertyRef Name="IDPitanje" />
+            </Principal>
+            <Dependent Role="Odgovor">
+              <PropertyRef Name="KorenoPitanje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_16">
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="0..1" />
+          <End Role="Odgovor1" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Odgovor">
+              <PropertyRef Name="IDOdgovor" />
+            </Principal>
+            <Dependent Role="Odgovor1">
+              <PropertyRef Name="Odgovoreni" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_2">
+          <End Role="Kategorija" Type="Self.Kategorija" Multiplicity="0..1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorija">
+              <PropertyRef Name="IDKategorija" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="IDKategorija" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_3">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="Autor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_4">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Odgovor">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_5">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Ocenio" Type="Self.Ocenio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Ocenio">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_6">
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="1" />
+          <End Role="Ocenio" Type="Self.Ocenio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Odgovor">
+              <PropertyRef Name="IDOdgovor" />
+            </Principal>
+            <Dependent Role="Ocenio">
+              <PropertyRef Name="IDOdgovor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_8">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Kanal">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IEPBazaModelStoreContainer">
+          <EntitySet Name="AgentPovezan" EntityType="Self.AgentPovezan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kanal" EntityType="Self.Kanal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kategorija" EntityType="Self.Kategorija" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Narudzbina" EntityType="Self.Narudzbina" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ocenio" EntityType="Self.Ocenio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Odgovor" EntityType="Self.Odgovor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pitanje" EntityType="Self.Pitanje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vrednosti" EntityType="Self.Vrednosti" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="R_10" Association="Self.R_10">
+            <End Role="Kanal" EntitySet="Kanal" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_11" Association="Self.R_11">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Narudzbina" EntitySet="Narudzbina" />
+          </AssociationSet>
+          <AssociationSet Name="R_12" Association="Self.R_12">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="AgentPovezan" EntitySet="AgentPovezan" />
+          </AssociationSet>
+          <AssociationSet Name="R_13" Association="Self.R_13">
+            <End Role="Kanal" EntitySet="Kanal" />
+            <End Role="AgentPovezan" EntitySet="AgentPovezan" />
+          </AssociationSet>
+          <AssociationSet Name="R_15" Association="Self.R_15">
+            <End Role="Pitanje" EntitySet="Pitanje" />
+            <End Role="Odgovor" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="R_16" Association="Self.R_16">
+            <End Role="Odgovor" EntitySet="Odgovor" />
+            <End Role="Odgovor1" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="R_2" Association="Self.R_2">
+            <End Role="Kategorija" EntitySet="Kategorija" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_3" Association="Self.R_3">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_4" Association="Self.R_4">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Odgovor" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="R_5" Association="Self.R_5">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Ocenio" EntitySet="Ocenio" />
+          </AssociationSet>
+          <AssociationSet Name="R_6" Association="Self.R_6">
+            <End Role="Odgovor" EntitySet="Odgovor" />
+            <End Role="Ocenio" EntitySet="Ocenio" />
+          </AssociationSet>
+          <AssociationSet Name="R_8" Association="Self.R_8">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Kanal" EntitySet="Kanal" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IEPBazaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Kanal">
+          <Key>
+            <PropertyRef Name="IDKanal" />
+          </Key>
+          <Property Name="Naziv" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DatumOtvaranja" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IDKorisnik" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDKanal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Pitanje" Relationship="Self.R_10" FromRole="Kanal" ToRole="Pitanje" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.R_8" FromRole="Kanal" ToRole="Korisnik" />
+          <NavigationProperty Name="Korisnik1" Relationship="Self.AgentPovezan" FromRole="Kanal" ToRole="Korisnik" />
+        </EntityType>
+        <EntityType Name="Kategorija">
+          <Key>
+            <PropertyRef Name="IDKategorija" />
+          </Key>
+          <Property Name="IDKategorija" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Pitanje" Relationship="Self.R_2" FromRole="Kategorija" ToRole="Pitanje" />
+        </EntityType>
+        <EntityType Name="Korisnik">
+          <Key>
+            <PropertyRef Name="IDKorisnik" />
+          </Key>
+          <Property Name="IDKorisnik" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lozinka" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BrojTokena" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="9" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Tip" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Kanal" Relationship="Self.R_8" FromRole="Korisnik" ToRole="Kanal" />
+          <NavigationProperty Name="Narudzbina" Relationship="Self.R_11" FromRole="Korisnik" ToRole="Narudzbina" />
+          <NavigationProperty Name="Pitanje" Relationship="Self.R_3" FromRole="Korisnik" ToRole="Pitanje" />
+          <NavigationProperty Name="Odgovor" Relationship="Self.R_4" FromRole="Korisnik" ToRole="Odgovor" />
+          <NavigationProperty Name="Ocenio" Relationship="Self.R_5" FromRole="Korisnik" ToRole="Ocenio" />
+          <NavigationProperty Name="Kanal1" Relationship="Self.AgentPovezan" FromRole="Korisnik" ToRole="Kanal" />
+        </EntityType>
+        <EntityType Name="Narudzbina">
+          <Key>
+            <PropertyRef Name="IDNarudzbina" />
+          </Key>
+          <Property Name="IDNarudzbina" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DatumPravljenja" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="KupljeniPaket" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDKorisnik" Type="Int32" Nullable="false" />
+          <Property Name="Cena" Type="Int32" />
+          <Property Name="DobijenoTokena" Type="Int32" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.R_11" FromRole="Narudzbina" ToRole="Korisnik" />
+        </EntityType>
+        <EntityType Name="Ocenio">
+          <Key>
+            <PropertyRef Name="IDKorisnik" />
+            <PropertyRef Name="IDOdgovor" />
+          </Key>
+          <Property Name="IDKorisnik" Type="Int32" Nullable="false" />
+          <Property Name="IDOdgovor" Type="Int32" Nullable="false" />
+          <Property Name="Ocena" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.R_5" FromRole="Ocenio" ToRole="Korisnik" />
+          <NavigationProperty Name="Odgovor" Relationship="Self.R_6" FromRole="Ocenio" ToRole="Odgovor" />
+        </EntityType>
+        <EntityType Name="Odgovor">
+          <Key>
+            <PropertyRef Name="IDOdgovor" />
+          </Key>
+          <Property Name="IDOdgovor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Odgovoreni" Type="Int32" />
+          <Property Name="Tekst" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDKorisnik" Type="Int32" Nullable="false" />
+          <Property Name="BrojPozitivnihOcena" Type="Int32" Nullable="false" />
+          <Property Name="BrojNegativnihOcena" Type="Int32" Nullable="false" />
+          <Property Name="DatumPravljenja" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="KorenoPitanje" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.R_4" FromRole="Odgovor" ToRole="Korisnik" />
+          <NavigationProperty Name="Ocenio" Relationship="Self.R_6" FromRole="Odgovor" ToRole="Ocenio" />
+          <NavigationProperty Name="Pitanje" Relationship="Self.R_15" FromRole="Odgovor" ToRole="Pitanje" />
+          <NavigationProperty Name="Odgovor1" Relationship="Self.R_16" FromRole="Odgovor" ToRole="Odgovor1" />
+          <NavigationProperty Name="Odgovor2" Relationship="Self.R_16" FromRole="Odgovor1" ToRole="Odgovor" />
+        </EntityType>
+        <EntityType Name="Pitanje">
+          <Key>
+            <PropertyRef Name="IDPitanje" />
+          </Key>
+          <Property Name="Tekst" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Slika" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="IDKategorija" Type="Int32" />
+          <Property Name="Autor" Type="Int32" Nullable="false" />
+          <Property Name="DatumPravljenja" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DatumZakljucavanja" Type="DateTime" Precision="3" />
+          <Property Name="Naslov" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EkstenzijaSlike" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IDKanal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="IDPitanje" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Kanal" Relationship="Self.R_10" FromRole="Pitanje" ToRole="Kanal" />
+          <NavigationProperty Name="Kategorija" Relationship="Self.R_2" FromRole="Pitanje" ToRole="Kategorija" />
+          <NavigationProperty Name="Korisnik" Relationship="Self.R_3" FromRole="Pitanje" ToRole="Korisnik" />
+          <NavigationProperty Name="Odgovor" Relationship="Self.R_15" FromRole="Pitanje" ToRole="Odgovor" />
+        </EntityType>
+        <EntityType Name="Vrednosti">
+          <Key>
+            <PropertyRef Name="Naziv" />
+          </Key>
+          <Property Name="Naziv" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Cena" Type="Int32" />
+          <Property Name="BrojTokena" Type="Int32" />
+        </EntityType>
+        <Association Name="R_10">
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="0..1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kanal">
+              <PropertyRef Name="IDKanal" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="IDKanal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_8">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Kanal">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_2">
+          <End Role="Kategorija" Type="Self.Kategorija" Multiplicity="0..1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorija">
+              <PropertyRef Name="IDKategorija" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="IDKategorija" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_11">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Narudzbina" Type="Self.Narudzbina" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Narudzbina">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_3">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Pitanje">
+              <PropertyRef Name="Autor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_4">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Odgovor">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_5">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="1" />
+          <End Role="Ocenio" Type="Self.Ocenio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Korisnik">
+              <PropertyRef Name="IDKorisnik" />
+            </Principal>
+            <Dependent Role="Ocenio">
+              <PropertyRef Name="IDKorisnik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_6">
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="1" />
+          <End Role="Ocenio" Type="Self.Ocenio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Odgovor">
+              <PropertyRef Name="IDOdgovor" />
+            </Principal>
+            <Dependent Role="Ocenio">
+              <PropertyRef Name="IDOdgovor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_15">
+          <End Role="Pitanje" Type="Self.Pitanje" Multiplicity="1" />
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pitanje">
+              <PropertyRef Name="IDPitanje" />
+            </Principal>
+            <Dependent Role="Odgovor">
+              <PropertyRef Name="KorenoPitanje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="R_16">
+          <End Role="Odgovor" Type="Self.Odgovor" Multiplicity="0..1" />
+          <End Role="Odgovor1" Type="Self.Odgovor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Odgovor">
+              <PropertyRef Name="IDOdgovor" />
+            </Principal>
+            <Dependent Role="Odgovor1">
+              <PropertyRef Name="Odgovoreni" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AgentPovezan">
+          <End Role="Korisnik" Type="Self.Korisnik" Multiplicity="*" />
+          <End Role="Kanal" Type="Self.Kanal" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="IEPBazaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Kanal" EntityType="Self.Kanal" />
+          <EntitySet Name="Kategorija" EntityType="Self.Kategorija" />
+          <EntitySet Name="Korisnik" EntityType="Self.Korisnik" />
+          <EntitySet Name="Narudzbina" EntityType="Self.Narudzbina" />
+          <EntitySet Name="Ocenio" EntityType="Self.Ocenio" />
+          <EntitySet Name="Odgovor" EntityType="Self.Odgovor" />
+          <EntitySet Name="Pitanje" EntityType="Self.Pitanje" />
+          <EntitySet Name="Vrednosti" EntityType="Self.Vrednosti" />
+          <AssociationSet Name="R_10" Association="Self.R_10">
+            <End Role="Kanal" EntitySet="Kanal" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_8" Association="Self.R_8">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Kanal" EntitySet="Kanal" />
+          </AssociationSet>
+          <AssociationSet Name="R_2" Association="Self.R_2">
+            <End Role="Kategorija" EntitySet="Kategorija" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_11" Association="Self.R_11">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Narudzbina" EntitySet="Narudzbina" />
+          </AssociationSet>
+          <AssociationSet Name="R_3" Association="Self.R_3">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Pitanje" EntitySet="Pitanje" />
+          </AssociationSet>
+          <AssociationSet Name="R_4" Association="Self.R_4">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Odgovor" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="R_5" Association="Self.R_5">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Ocenio" EntitySet="Ocenio" />
+          </AssociationSet>
+          <AssociationSet Name="R_6" Association="Self.R_6">
+            <End Role="Odgovor" EntitySet="Odgovor" />
+            <End Role="Ocenio" EntitySet="Ocenio" />
+          </AssociationSet>
+          <AssociationSet Name="R_15" Association="Self.R_15">
+            <End Role="Pitanje" EntitySet="Pitanje" />
+            <End Role="Odgovor" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="R_16" Association="Self.R_16">
+            <End Role="Odgovor" EntitySet="Odgovor" />
+            <End Role="Odgovor1" EntitySet="Odgovor" />
+          </AssociationSet>
+          <AssociationSet Name="AgentPovezan" Association="Self.AgentPovezan">
+            <End Role="Korisnik" EntitySet="Korisnik" />
+            <End Role="Kanal" EntitySet="Kanal" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IEPBazaModelStoreContainer" CdmEntityContainer="IEPBazaEntities">
+          <EntitySetMapping Name="Kanal">
+            <EntityTypeMapping TypeName="IEPBazaModel.Kanal">
+              <MappingFragment StoreEntitySet="Kanal">
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="DatumOtvaranja" ColumnName="DatumOtvaranja" />
+                <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IDKanal" ColumnName="IDKanal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kategorija">
+            <EntityTypeMapping TypeName="IEPBazaModel.Kategorija">
+              <MappingFragment StoreEntitySet="Kategorija">
+                <ScalarProperty Name="IDKategorija" ColumnName="IDKategorija" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Korisnik">
+            <EntityTypeMapping TypeName="IEPBazaModel.Korisnik">
+              <MappingFragment StoreEntitySet="Korisnik">
+                <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Lozinka" ColumnName="Lozinka" />
+                <ScalarProperty Name="BrojTokena" ColumnName="BrojTokena" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Tip" ColumnName="Tip" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Narudzbina">
+            <EntityTypeMapping TypeName="IEPBazaModel.Narudzbina">
+              <MappingFragment StoreEntitySet="Narudzbina">
+                <ScalarProperty Name="IDNarudzbina" ColumnName="IDNarudzbina" />
+                <ScalarProperty Name="DatumPravljenja" ColumnName="DatumPravljenja" />
+                <ScalarProperty Name="KupljeniPaket" ColumnName="KupljeniPaket" />
+                <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+                <ScalarProperty Name="DobijenoTokena" ColumnName="DobijenoTokena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ocenio">
+            <EntityTypeMapping TypeName="IEPBazaModel.Ocenio">
+              <MappingFragment StoreEntitySet="Ocenio">
+                <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+                <ScalarProperty Name="IDOdgovor" ColumnName="IDOdgovor" />
+                <ScalarProperty Name="Ocena" ColumnName="Ocena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Odgovor">
+            <EntityTypeMapping TypeName="IEPBazaModel.Odgovor">
+              <MappingFragment StoreEntitySet="Odgovor">
+                <ScalarProperty Name="IDOdgovor" ColumnName="IDOdgovor" />
+                <ScalarProperty Name="Odgovoreni" ColumnName="Odgovoreni" />
+                <ScalarProperty Name="Tekst" ColumnName="Tekst" />
+                <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+                <ScalarProperty Name="BrojPozitivnihOcena" ColumnName="BrojPozitivnihOcena" />
+                <ScalarProperty Name="BrojNegativnihOcena" ColumnName="BrojNegativnihOcena" />
+                <ScalarProperty Name="DatumPravljenja" ColumnName="DatumPravljenja" />
+                <ScalarProperty Name="KorenoPitanje" ColumnName="KorenoPitanje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pitanje">
+            <EntityTypeMapping TypeName="IEPBazaModel.Pitanje">
+              <MappingFragment StoreEntitySet="Pitanje">
+                <ScalarProperty Name="Tekst" ColumnName="Tekst" />
+                <ScalarProperty Name="Slika" ColumnName="Slika" />
+                <ScalarProperty Name="IDKategorija" ColumnName="IDKategorija" />
+                <ScalarProperty Name="Autor" ColumnName="Autor" />
+                <ScalarProperty Name="DatumPravljenja" ColumnName="DatumPravljenja" />
+                <ScalarProperty Name="DatumZakljucavanja" ColumnName="DatumZakljucavanja" />
+                <ScalarProperty Name="Naslov" ColumnName="Naslov" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EkstenzijaSlike" ColumnName="EkstenzijaSlike" />
+                <ScalarProperty Name="IDKanal" ColumnName="IDKanal" />
+                <ScalarProperty Name="IDPitanje" ColumnName="IDPitanje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vrednosti">
+            <EntityTypeMapping TypeName="IEPBazaModel.Vrednosti">
+              <MappingFragment StoreEntitySet="Vrednosti">
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+                <ScalarProperty Name="BrojTokena" ColumnName="BrojTokena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AgentPovezan" TypeName="IEPBazaModel.AgentPovezan" StoreEntitySet="AgentPovezan">
+            <EndProperty Name="Korisnik">
+              <ScalarProperty Name="IDKorisnik" ColumnName="IDKorisnik" />
+            </EndProperty>
+            <EndProperty Name="Kanal">
+              <ScalarProperty Name="IDKanal" ColumnName="IDKanal" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

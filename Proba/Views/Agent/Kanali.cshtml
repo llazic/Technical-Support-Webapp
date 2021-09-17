@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Proba.Models.Kanal>
+
+@{
+    ViewBag.Title = "Kanali";
+    Layout = "~/Views/Shared/AgentLayout.cshtml";
+}
+
+<h2>Kanali</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Naziv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatumOtvaranja)
+        </th>
+        <th>
+            Povezanih agenata
+        </th>
+        <th>
+            Klijent
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Naziv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatumOtvaranja)
+        </td>
+        <td>
+            @item.Korisnik1.Count
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Korisnik.Ime)
+        </td>
+        <td>
+            @Html.ActionLink("Poveži se", "Kanal", new { id=item.IDKanal })
+        </td>
+    </tr>
+}
+
+</table>

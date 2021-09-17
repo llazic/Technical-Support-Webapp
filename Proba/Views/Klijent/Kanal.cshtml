@@ -1,0 +1,123 @@
+﻿@model Tuple<Proba.Models.Korisnik, Proba.Models.Vrednosti, Proba.Models.Kanal, IEnumerable<Proba.Models.Pitanje>>
+
+@{
+    ViewBag.Title = "Kanal";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+<center>
+    <h3>
+        <font color="red">
+            @ViewBag.Message
+        </font>
+    </h3>
+</center>
+
+<table width="100%">
+    <tr>
+        <td>
+            <h2 style="margin-top:0px; margin-bottom:0px;">
+                Kanal @if (Model.Item3 != null && Model.Item3.Status == "Otvoren")
+                {<span>@Model.Item3.Naziv</span>}
+            </h2>
+        </td>
+        @if (Model.Item3 != null && Model.Item3.Status == "Otvoren")
+        {
+            <td align="right">
+                <form method="post" action="~/Klijent/ZatvoriKanal">
+                    <input type="hidden" name="IDKanal" value="@Model.Item3.IDKanal" />
+                    <input type="submit" value="Zatvori kanal" class="btn btn-default" />
+                </form>
+            </td>
+        }
+    </tr>
+</table>
+<hr />
+
+
+@if (Model.Item3 != null && Model.Item3.Status == "Otvoren")
+{
+    <div>
+        <div id="poruke" style="height:400px; overflow-y:scroll; width:100%;">
+            @if (Model.Item4 != null)
+            {
+                foreach (var pitanje in Model.Item4)
+                {
+                    if (pitanje.Korisnik.Tip == "Klijent")
+                    {
+                        <font color="blue">@pitanje.Korisnik.Ime: @pitanje.Tekst<br /><hr /></font>
+                    }
+                    else
+                    {
+                        <span>@pitanje.Korisnik.Ime: @pitanje.Tekst<br /><hr /></span>
+                    }
+                }
+            }
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Tekst">Poruka</label>
+            <div class="col-md-10">
+                <textarea class="form-control" id="poruka" name="Pitanje" rows="7" required maxlength="200"></textarea>
+                <span class="field-validation-valid text-danger" data-valmsg-for="Tekst" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" style="margin-top:10px">
+                <input type="button" value="Pošalji" class="btn btn-default" id="dugme" />
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        <script type="text/javascript" src="~/Scripts/jquery.signalR-2.4.1.js"></script>
+        <script type="text/javascript" src="~/signalR/hubs"></script>
+        <script>
+            $(document).ready(function () {
+
+                var hub = $.connection.myHub;
+                var poruke = document.getElementById('poruke');
+                poruke.scrollTop = poruke.scrollHeight;
+
+                hub.client.prikaziPoruku = function (ime, poruka, tip) {
+                    if (tip == 'Klijent') {
+                        $('#poruke').append('<font color="blue">' + ime + ': ' + poruka + '<br/><hr/></font>');
+                    } else {
+                        $('#poruke').append(ime + ': ' + poruka + '<br/><hr/>');
+                    }
+                    poruke.scrollTop = poruke.scrollHeight;
+                }
+
+                $.connection.hub.start().done(function () {
+
+                    hub.server.prikljuciSe('@Model.Item3.IDKanal', @Model.Item1.IDKorisnik);
+
+                    $('#dugme').click(function () {
+                        if ($('#poruka').val() != '') {
+                            hub.server.posalji('@Model.Item1.IDKorisnik', $('#poruka').val(), '@Model.Item3.IDKanal');
+                            $('#poruka').val('');
+                        }
+                    })
+                });
+
+            });
+        </script>
+    }
+}
+else
+{
+    <div>
+        Trenutno imate @Model.Item1.BrojTokena tokena.
+        Otvaranje novog kanala košta @Model.Item2.Cena tokena.
+        @if (@Model.Item1.BrojTokena >= @Model.Item2.Cena)
+        {
+            <span>
+                To znači da možete da otvorite kanal na sledećem @Html.ActionLink("linku", "NapraviKanal", "Klijent").
+            </span>
+        }
+        else
+        {
+            <span>
+                To znači da ako želite da otvorite kanal prvo morate kupiti tokene na sledećem @Html.ActionLink("linku", "Kupi", "Klijent").
+            </span>
+        }
+    </div>
+}

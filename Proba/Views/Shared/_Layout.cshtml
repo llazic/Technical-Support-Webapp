@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Početna", "Index", "Gost", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <!--za ActionLink(sta ce pisati, metoda, kontroler)-->
+                    <li>@Html.ActionLink("Pitanja", "Pitanja", "Gost")</li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Prijava", "Login", "Gost")</li>
+                    <li>@Html.ActionLink("Registracija", "Registracija", "Gost")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer></footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+
+<script>
+    function sortTable() {
+        var sviOdgovori, tabele, switching, i, x, y, shouldSwitch, dateTime1, date1, time1, datum1, dateTime2, date2, time2, datum2, sortiranje;
+        sviOdgovori = document.getElementById("odgovoriDiv");
+        switching = true;
+
+        sortiranje = document.getElementById("sortiranje").value;
+        if (sortiranje == "Sortiraj...") return;
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            tabele = sviOdgovori.getElementsByTagName("span");
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 0; i < (tabele.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                switch (sortiranje) {
+                    case "Hronološki":
+                        datum1 = tabele[i].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[3];
+                        datum2 = tabele[i + 1].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[3];
+
+                        dateTime1 = datum1.split(" ");
+                        date1 = dateTime1[1].split(".");
+                        time1 = dateTime1[2].split(".");
+                        x = new Date(date1[1] + "/" + date1[0] + "/" + date1[2] + " " + time1[0] + ":" + time1[1] + ":" + time1[2]);
+
+                        dateTime2 = datum2.split(" ");
+                        date2 = dateTime2[1].split(".");
+                        time2 = dateTime2[2].split(".");
+                        y = new Date(date2[1] + "/" + date2[0] + "/" + date2[2] + " " + time2[0] + ":" + time2[1] + ":" + time2[2]);
+                        break;
+                    case "Najviše dobrih ocena":
+                        x = parseInt(tabele[i].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[1].split(" ")[1]);
+                        y = parseInt(tabele[i + 1].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[1].split(" ")[1]);
+                        break;
+                    case "Najviše loših ocena":
+                        x = parseInt(tabele[i].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[2].split(" ")[1]);
+                        y = parseInt(tabele[i + 1].getElementsByTagName("table")[0].getElementsByTagName("tr")[1].getElementsByTagName("td")[0].innerHTML.split("|")[2].split(" ")[1]);
+                        break;
+                }
+
+
+
+                // Check if the two rows should switch place:
+                if (x < y) {
+                    // If so, mark as a switch and break the loop:
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                tabele[i].parentNode.insertBefore(tabele[i + 1], tabele[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+</html>

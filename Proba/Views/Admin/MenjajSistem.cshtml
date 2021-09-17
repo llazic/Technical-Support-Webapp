@@ -1,0 +1,86 @@
+﻿@model Tuple<Proba.Models.Vrednosti, Proba.Models.Vrednosti, Proba.Models.Vrednosti, Proba.Models.Vrednosti>
+
+@{
+    ViewBag.Title = "Sistem";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<center>
+    <h3>
+        <font color="red">
+            @ViewBag.Message
+        </font>
+    </h3>
+</center>
+
+<div style="margin-top: 10px; margin-bottom:10px">
+    <h2>Podesite cenu usluga</h2>
+</div>
+
+<form method="post" action="~/Admin/SacuvajSistem">
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                Usluga
+            </th>
+            <th>
+                Cena ($)
+            </th>
+            <th>
+                Broj tokena
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Model.Item1.Naziv paket
+            </td>
+            <td>
+                <input type="hidden" name="silver.Naziv" value="Silver" />
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="silver.Cena" type="number" value="@Model.Item1.Cena">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="silver.BrojTokena" type="number" value="@Model.Item1.BrojTokena">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Model.Item2.Naziv paket
+            </td>
+            <td>
+                <input type="hidden" name="gold.Naziv" value="Gold" />
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="gold.Cena" type="number" value="@Model.Item2.Cena">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="gold.BrojTokena" type="number" value="@Model.Item2.BrojTokena">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Model.Item3.Naziv paket
+            </td>
+            <td>
+                <input type="hidden" name="platinum.Naziv" value="Platinum" />
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="platinum.Cena" type="number" value="@Model.Item3.Cena">
+            </td>
+            <td>
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="platinum.BrojTokena" type="number" value="@Model.Item3.BrojTokena">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Otvaranje komunikacionog kanala
+            </td>
+            <td>
+                <input type="hidden" name="kanal.Naziv" value="KomunikacioniKanal" />
+                <input class="form-control text-box single-line" data-val="true" data-val-number="The field Iznos must be a number." id="Item1_Iznos" name="kanal.Cena" type="number" value="@Model.Item4.Cena">
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center">
+                <input type="submit" value="Sačuvaj" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+</form>

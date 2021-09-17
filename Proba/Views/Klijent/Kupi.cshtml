@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Kupi";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="row" style="padding-top:50px">
+    <div class="col-sm-4">
+        <div class="card text-center">
+            @*<img class="card-img-top" src="~/images/S.png" alt="Card image" style="width:270px;height:250px">*@
+            <div class="card-body text-center">
+                <h4> Silver paket </h4>
+                <h4> @ViewBag.Silver.BrojTokena tokena </h4>
+                <h4> @ViewBag.Silver.Cena $ </h4>
+            </div>
+            <div id="paypal-button-container-silver"></div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card text-center">
+            @*<img class="card-img-top" src="~/images/G.png" alt="Card image" style="width:250px;height:250px">*@
+            <div class="card-body text-center">
+                <h4> Gold paket </h4>
+                <h4> @ViewBag.Gold.BrojTokena tokena </h4>
+                <h4> @ViewBag.Gold.Cena $ </h4>
+            </div>
+            <div id="paypal-button-container-gold"></div>
+        </div> 
+    </div>
+    <div class="col-sm-4">
+        <div class="card text-center">
+            @*<img class="card-img-top" src="~/images/P.png" alt="Card image" style="width:280px;height:250px">*@
+            <div class="card-body text-center">
+                <h4> Platinum paket </h4>
+                <h4> @ViewBag.Platinum.BrojTokena tokena </h4>
+                <h4> @ViewBag.Platinum.Cena $ </h4>
+            </div>
+            <div id="paypal-button-container-platinum"></div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="https://www.paypal.com/sdk/js?client-id=ARyDkoB48MAmMCLxVkaKXFBuzMN0m2rLbTvNqKRzglHJ9i9wb9GnrPSh7uNVktayQOX8izWQPap-0phm">
+    </script>
+
+    <script>
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                // Set up the transaction
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '@ViewBag.Silver.Cena'
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    alert('Uspešno kupljeno od strane ' + details.payer.name.given_name);
+                    // Call your server to save the transaction
+                    return fetch('/Klijent/ZavrsenaKupovina', {
+                        method: 'post',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderID: data.orderID
+                        })
+                    });
+                });
+            }
+
+        }).render('#paypal-button-container-silver');
+
+    paypal.Buttons({
+            createOrder: function (data, actions) {
+                // Set up the transaction
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '@ViewBag.Gold.Cena'
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    alert('Uspešno kupljeno od strane ' + details.payer.name.given_name);
+                    // Call your server to save the transaction
+                    return fetch('/Klijent/ZavrsenaKupovina', {
+                        method: 'post',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderID: data.orderID
+                        })
+                    });
+                });
+            }
+
+    }).render('#paypal-button-container-gold');
+
+    paypal.Buttons({
+            createOrder: function (data, actions) {
+                // Set up the transaction
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '@ViewBag.Platinum.Cena'
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    alert('Uspešno kupljeno od strane ' + details.payer.name.given_name);
+                    // Call your server to save the transaction
+                    return fetch('/Klijent/ZavrsenaKupovina', {
+                        method: 'post',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            orderID: data.orderID
+                        })
+                    });
+                });
+            }
+
+        }).render('#paypal-button-container-platinum');
+    </script>
+
+}

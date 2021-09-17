@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Početna";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+
+<center>
+    <h3>
+        <font color="red">
+            @ViewBag.Message
+        </font>
+    </h3>
+</center>
+
+<!-- Search form -->
+<div class="row">
+    <div class="col-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-group" style="margin-top:10%; text-align:center">
+        <h1>Pretražite pitanja</h1>
+    </div>
+</div>
+<form method="post" action="~/Klijent/Pretraga">
+    <div class="row">
+        <div class="col-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-group">
+            <table width="100%">
+                <tr>
+                    <td width="90%">
+                        <input class="form-control input-lg" type="text" placeholder="Traži..." aria-label="Search" style="max-width:95%" name="tekst">
+                    </td>
+                    <td align="right">
+                        <input type="submit" value="Pretraži" class="btn btn-default" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+

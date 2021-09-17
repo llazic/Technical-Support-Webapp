@@ -1,0 +1,111 @@
+﻿@model Tuple<IEnumerable<Proba.Models.Pitanje>, IEnumerable<Proba.Models.Kategorija>, string, int>
+
+@{
+    ViewBag.Title = "Pitanja";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+
+<table width="100%" style="margin-top:10px; margin-bottom:10px;">
+    <tr>
+        <td>
+            <h2 style="margin-top:10px">Pitanja</h2>
+        </td>
+        <form method="post" action="~/Klijent/Pitanja">
+            <td align="right">
+                <select class="form-control" id="sel1" name="kategorija">
+                    <option>Sve kategorije</option>
+                    @foreach (var kat in Model.Item2)
+                    {
+                        if (Model.Item3 == kat.Naziv)
+                        {
+                            <option selected>@kat.Naziv</option>
+                        }
+                        else
+                        {
+                            <option>@kat.Naziv</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td align="center">
+                <input type="submit" value="Odaberi" class="btn btn-default" />
+            </td>
+        </form>
+        <td align="right">
+            <form method="get" action="~/Klijent/MojaPitanja">
+                <input type="submit" value="Moja pitanja" class="btn btn-default"/>
+            </form>
+        </td>
+    </tr>
+</table>
+<table class="table" id="tabelaPitanja">
+    <tr>
+        <th>
+            Naslov
+        </th>
+        <th>
+            Broj Odgovora
+        </th>
+        <th>
+            Autor
+        </th>
+        <th></th>
+    </tr>
+    @{
+        foreach (var item in Model.Item1)
+        {
+            if (item.Status == "Zakljucano")
+            {
+                <tr style="background-color:lightgray">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Naslov)
+                    </td>
+                    <td>
+                        @item.Odgovor.Count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Korisnik.Ime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Prikaži", "PregledPitanja", new { id = item.IDPitanje })
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Naslov)
+                    </td>
+                    <td>
+                        @item.Odgovor.Count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Korisnik.Ime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Prikaži", "PregledPitanja", new { id = item.IDPitanje })
+                    </td>
+                </tr>
+            }
+        }
+    }
+</table>
+
+<nav aria-label="Page navigation example" style="text-align:center">
+    <ul class="pagination">
+        @for (int i = 1; i < Model.Item4 + 1; i++)
+        {
+            if (Model.Item3 == null)
+            {
+                <li class="page-item"><a class="page-link" href="/Klijent/Pitanja?kategorija=Sve&strana=@i">@i</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="/Klijent/Pitanja?kategorija=@Model.Item3&strana=@i">@i</a></li>
+            }
+
+        }
+    </ul>
+</nav>
+

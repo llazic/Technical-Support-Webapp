@@ -1,0 +1,67 @@
+﻿@model Tuple<Proba.Models.Pitanje, Proba.Models.Odgovor>
+
+@{
+    ViewBag.Title = "Napiši odgovor";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Napiši odgovor</h2>
+
+@Html.AntiForgeryToken()
+
+@if (Model.Item2 == null)
+{
+    <form method="post" action="~/Admin/SacuvajOdgovor">
+        <div class="form-horizontal">
+            <h4></h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <img src='@Url.Action( "DohvatiSliku", new { id = Model.Item1.IDPitanje } )' style="float:right; border:1px solid black" width="200" height="200">
+            @Html.DisplayFor(model => model.Item1.Tekst)
+            <div style="clear:both"></div>
+            <hr />
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Tekst">Tekst</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" id="Tekst" name="Tekst" rows="7" required maxlength="200"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="Tekst" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <input type="hidden" name="IDPitanje" value="@Model.Item1.IDPitanje" />
+            <input type="hidden" name="Odgovoreni" value="-1" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Potvrdi" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <form method="post" action="~/Admin/SacuvajOdgovor">
+        <div class="form-horizontal">
+            <h4></h4>
+            <hr />
+            @Html.DisplayFor(model => model.Item2.Tekst)
+            <hr />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Tekst">Tekst</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" id="Tekst" name="Tekst" rows="7" required maxlength="200"></textarea>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="Tekst" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <input type="hidden" name="IDPitanje" value="@Model.Item1.IDPitanje" />
+            <input type="hidden" name="Odgovoreni" value="@Model.Item2.IDOdgovor" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Potvrdi" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+

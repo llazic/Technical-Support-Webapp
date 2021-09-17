@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Proba.Models.Narudzbina>
+
+@{
+    ViewBag.Title = "Narudžbine";
+    Layout = "~/Views/Shared/KlijentLayout.cshtml";
+}
+
+<h2>Narudžbine</h2>
+
+<table class="table" style="margin-top:10px; margin-bottom:10px;">
+    <tr>
+        <th>
+            Datum kupovine
+        </th>
+        <th>
+            Kupljeni paket
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cena)
+        </th>
+        <th>
+            Dobijeno tokena
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatumPravljenja)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.KupljeniPaket)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cena)$
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DobijenoTokena)
+        </td>
+    </tr>
+}
+
+</table>

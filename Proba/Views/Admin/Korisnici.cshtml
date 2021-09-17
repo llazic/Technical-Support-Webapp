@@ -1,0 +1,59 @@
+﻿@model Tuple<IEnumerable<Proba.Models.Korisnik>, Proba.Models.Korisnik>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<form method="get" action="~/Admin/IzmeniKorisnika/@Model.Item2.IDKorisnik" style="margin-top:10px; margin-bottom:10px;">
+    <table width="100%">
+        <tr>
+            <td>
+                <h2 style="margin-top:10px">Korisnici</h2>
+            </td>
+            <td align="right">
+                @*<input type="hidden" name="id" value="@Model.Item2.IDKorisnik" />*@
+                <input type="submit" value="Moj profil" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Item2.Ime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item2.Prezime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item2.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Item2.Tip)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Item1) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Prezime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tip)
+        </td>
+        <td>
+            @Html.ActionLink("Prikaži", "IzmeniKorisnika", new { id=item.IDKorisnik })
+        </td>
+    </tr>
+}
+
+</table>

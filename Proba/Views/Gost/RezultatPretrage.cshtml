@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Proba.Models.Pitanje>
+
+@{
+    ViewBag.Title = "Rezultat pretrage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table width="100%" style="margin-top:10px; margin-bottom:10px;">
+    <tr>
+        <td>
+            <h2 style="margin-top:10px">Rezultat pretrage</h2>
+        </td>
+    </tr>
+</table>
+<table class="table" id="tabelaPitanja">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Naslov)
+        </th>
+        <th>
+            Broj Odgovora
+        </th>
+        <th>
+            Autor
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (item.Status == "Zakljucano")
+        {
+            <tr style="background-color:lightgray">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naslov)
+                </td>
+                <td>
+                    @item.Odgovor.Count
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Korisnik.Ime)
+                </td>
+                <td>
+                    @Html.ActionLink("Prikaži", "PregledPitanja", new { id = item.IDPitanje })
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naslov)
+                </td>
+                <td>
+                    @item.Odgovor.Count
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Korisnik.Ime)
+                </td>
+                <td>
+                    @Html.ActionLink("Prikaži", "PregledPitanja", new { id = item.IDPitanje })
+                </td>
+            </tr>
+        }
+    }
+</table>
+
